@@ -1,0 +1,33 @@
+version: "3.9"
+services:
+  mydb2:
+    image: mysql:8
+    container_name: mydb2
+    restart: always
+    ports:
+      - "3306:3306"
+    command: --init-file /data/application/init.sql
+    volumes:
+      - "./init_northwind.sql:/data/application/init.sql"
+    environment:
+      - MYSQL_ROOT_PASSWORD=contrasena
+      - MYSQL_DATABASE=Northwind
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    depends_on:
+      - mydb2
+    ports:
+      - "8080:8080"
+  sqoop2:
+    image: dvoros/sqoop:latest
+    container_name: sqoop2
+    tty: true
+    restart: always
+    ports:
+      - "9870:9870"
+    volumes:
+      - "/Users/danielecheverri/Downloads/jar:/jdbc"
+    depends_on:
+      - mydb2
