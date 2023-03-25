@@ -27,7 +27,27 @@ services:
     restart: always
     ports:
       - "9870:9870"
+      - "8020:8020" #HDFS
+      - "9000:9000"
+      - "16000:16000" # Sqoop Metastore
     volumes:
       - "/Users/danielecheverri/Downloads/jar:/jdbc"
     depends_on:
       - mydb2
+  cloudera:
+    image: cloudera/quickstart:latest
+    container_name: cloudera2
+    privileged: true
+    hostname: quickstart.cloudera
+    command: /usr/bin/docker-quickstart
+    restart: always
+    ports:
+      - "8888:8888"
+      - "7180:7180"
+      - "8088:8088"
+      - "50070:50070" # HDFS Rest Namenode
+      - "50075:50075" # HDFS Rest Datanode
+    tty: true 
+    volumes:
+      - ".:/zaid"
+      - "/Users/danielecheverri/Downloads/jar:/jdbc"
